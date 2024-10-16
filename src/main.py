@@ -2,7 +2,7 @@ from textnode import *
 
 def main():
     test_textnode = TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")
-    print(test_textnode.get_repr)
+    print(test_textnode.__repr__)
 
 
 
