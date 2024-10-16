@@ -52,3 +52,13 @@ class Test_TextNode_to_HTMLNode(unittest.TestCase):
         self.assertEqual(result.tag, "img")
         self.assertEqual(result.value, "")
         self.assertEqual(result.props, {"src": "https://www.google.com", "alt": "alt text"})
+
+    
+    #invalid TextType
+    def test_invalid_texttype(self):
+        with self.assertRaises(ValueError):
+            # Assuming TextType is an Enum with members like TEXT = 0, BOLD = 1, etc.
+            # You can use a number that is outside the usual range.
+            invalid_type = 99  # Make sure this doesn't overlap with real types
+            text_node = TextNode("Unknown text", invalid_type)
+            result = text_node_to_html_node(text_node)
