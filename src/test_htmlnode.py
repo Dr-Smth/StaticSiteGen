@@ -46,6 +46,34 @@ class TestHTMLNode(unittest.TestCase):
             leaf = LeafNode()
         except ValueError as e:
             assert str(e) == "LeafNode instances must have a 'value'."
+    
+    #parentnode tests
+    def test_simple_single_depth(self):
+        node = ParentNode("div", [LeafNode(None, "Simple Content")])
+        result = node.to_html()
+        expected = "<div>Simple Content</div>"
+        self.assertEqual(result, expected, "Simple single depth test failed!")
+
+    def test_nested_nodes(self):
+        child_node = ParentNode("span", [LeafNode(None, "Nested Text")])
+        parent_node = ParentNode("div", [child_node])
+        result = parent_node.to_html()
+        expected = "<div><span>Nested Text</span></div>"
+        self.assertEqual(result, expected, "Nested nodes test failed!")
+
+    def test_props_handling(self):
+        node = ParentNode("div", [LeafNode(None, "Content")], props={"class": "example"})
+        result = node.to_html()
+        expected = '<div class="example">Content</div>'
+        self.assertEqual(result, expected, "Props handling test failed!")
+
+    def test_no_tag_error(self):
+        with self.assertRaises(ValueError):
+            ParentNode(None, [LeafNode(None, "Missing Tag")]).to_html()
+
+    def test_empty_children_error(self):
+        with self.assertRaises(ValueError):
+            ParentNode("div", []).to_html()
 
 
 if __name__ == "__main__":

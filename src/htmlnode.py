@@ -32,22 +32,50 @@ class HTMLNode():
     
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag=None, value=None, props=None):
+    def __init__(self, tag = None, value = None, props = None):
         if value is None:
             raise ValueError("LeafNode instances must have a 'value'.")
         super().__init__(tag, value, None, props)
     
     def to_html(self):
-        #if tag does not exist:
+        #if tag does not exist return "value" as raw text string:
         if self.tag == None:
             return f"{self.value}"      
 
-        #if props exists:
+        #if props exists set "prop_string" to a string representation of "props" using .props_to_html method:
         if self.props != None:
             prop_string = self.props_to_html()
         else: prop_string = ""
 
+        #create the opening and closing tags
         start_tag = f"<{self.tag}{prop_string}>"
         end_tag = f"</{self.tag}>"
         
-        return start_tag + self.value + end_tag 
+        #combine the opening tag, value, and closing tag
+        return start_tag + self.value + end_tag
+    
+
+class ParentNode(HTMLNode):
+    def __init__(self, tag = None, children = None, props = None):
+        if children is None:
+            raise ValueError("ParentNode instances must have 'children'.")
+        if tag is None:
+            raise ValueError("ParentNode instances must have a 'tag'.")
+        super().__init__(tag, None, children, props)
+
+    def to_html(self):
+        if self.children == []:
+            raise ValueError("ParentNode instances must have 'children'.")
+
+        #generate the string representation of the node's attributes
+        prop_string = self.props_to_html() if self.props else ""
+        
+        #create the opening and closing tags
+        start_tag = f"<{self.tag}{prop_string}>"
+        end_tag = f"</{self.tag}>"
+        
+        #recursively generate HTML for all child nodes
+        children_html = ''.join(child.to_html() for child in self.children)
+        
+        #combine the opening tag, children HTML, and closing tag
+        return f"{start_tag}{children_html}{end_tag}"
