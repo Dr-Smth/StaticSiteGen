@@ -1,3 +1,5 @@
+#HTML node classes
+
 class HTMLNode():
     def __init__(self, tag = None, value = None, children = None, props = None):
         self.tag = tag #string representing the HTML tag name (e.g. "p", "a", "h1", etc.)
@@ -27,3 +29,25 @@ class HTMLNode():
             f"\n"
             f"Props: {self.props})"
         )
+    
+
+class LeafNode(HTMLNode):
+    def __init__(self, tag=None, value=None, props=None):
+        if value is None:
+            raise ValueError("LeafNode instances must have a 'value'.")
+        super().__init__(tag, value, None, props)
+    
+    def to_html(self):
+        #if tag does not exist:
+        if self.tag == None:
+            return f"{self.value}"      
+
+        #if props exists:
+        if self.props != None:
+            prop_string = self.props_to_html()
+        else: prop_string = ""
+
+        start_tag = f"<{self.tag}{prop_string}>"
+        end_tag = f"</{self.tag}>"
+        
+        return start_tag + self.value + end_tag 
