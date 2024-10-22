@@ -1,5 +1,5 @@
 from textnode import *
-from htmlnode import*
+from htmlnode import *
 
 #function to convert text node into html node
 def text_node_to_html_node(text_node):
